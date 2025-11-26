@@ -14,6 +14,7 @@ namespace VideoGameAPI.Repository.Core
         // dbset resulteerd in een table in database
         // best practise om de set direct te initializeren ook
         public DbSet<VideoGame> VideoGames => Set<VideoGame>();
+        public DbSet<Developer> Developers => Set<Developer>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +56,31 @@ namespace VideoGameAPI.Repository.Core
                 }
 
              );
+            modelBuilder.Entity<Developer>().HasData(
+                 new Developer
+                 {
+                     Id = 1,
+                     FirstName = "Melliw",
+                     LastName = "De la Montange",
+                     Email = "melliw.delamontagne@gmail.com"
+                 },
+                new Developer
+                {
+                    Id = 2,
+                    FirstName = "Alexander",
+                    LastName = "De la Mer",
+                    Email = "alexander.delamer@gmail.com"
+
+                },
+                new Developer
+                {
+                    Id = 3,
+                    FirstName = "Mik",
+                    LastName = "Treaccab",
+                    Email = "Mik.Treaccab@gmail.com"
+
+                }
+            );
         }
     }
 

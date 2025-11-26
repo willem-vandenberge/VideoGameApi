@@ -19,25 +19,33 @@ namespace VideoGameAPI.Repository
             _context = context;
         }
 
-        public Task<IEnumerable<VideoGame>> GetAllAsync()
+        public async Task<IEnumerable<VideoGame>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            try
+            {
+                var videoGames = await _context.VideoGames
+                    .ToListAsync();
+                return videoGames;
+
+            } catch ( Exception e)
+            {
+                throw new Exception($"An Error in VideoGameDAO in GetAllAsync method with message: {e.Message}.");
+            }
         }
 
         public async Task<VideoGame> GetAsync(int id)
         {
-            try
-            {
-                // ipv firstordefault FirstAsync?  => firstordefault geeft null indien niet gevonden
-                var game = await _context.VideoGames
-                    .Where(v => v.Id == id) // where closule nodig? 
-                    .FirstOrDefaultAsync();
-                //var game = await _context.VideoGames.FirstOrDefaultAsync(v => v.Id == id);
+            try {
+                // First() => exception indien niks gevonden dat aan conditie voldoet
+                // FirstOrDefault() => returns null indien nietts aan conditie voldoet
+                return await _context.VideoGames
+                    .Where(v => v.Id == id) // where clause weglaten? 
+                    .FirstAsync();
 
-                return game is null ? throw new Exception() : game;
-            }
-            catch
-            {
+            } catch(InvalidOperationException ex) {
+                throw new Exception($"Error in VideoGameDAO in getAsync method, element with id: {id} not found.");
+
+            } catch{
                 throw new Exception($"Error in VideoGameDAO in getAsync method while looking for record with id: {id}");
             }
             

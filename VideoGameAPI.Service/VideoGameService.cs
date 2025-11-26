@@ -23,16 +23,14 @@ namespace VideoGameAPI.Service
 
         public async Task<VideoGame> Get(int id)
         {
-            //throw new NotImplementedException();
-
             return await _videoGameDAO.GetAsync(id);
         }
 
 
 
-        public Task<IEnumerable<VideoGame>> GetAll()
+        public async Task<IEnumerable<VideoGame>> GetAll()
         {
-            throw new NotImplementedException();
+            return await _videoGameDAO.GetAllAsync();
         }
     }
 }

@@ -21,10 +21,13 @@ builder.Services.AddDbContext<VideoGameDBContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Data access objects registreren voor DI
+// AddTransient: registreren van een service met een tijdelijke levensduur
 builder.Services.AddTransient<IDAO<VideoGame>, VideoGameDAO>();
+builder.Services.AddTransient<IDAO<Developer>, DeveloperDAO>();
 
 // Service klassen registreren voor DI
 builder.Services.AddTransient<IService<VideoGame>, VideoGameService>();
+builder.Services.AddTransient<IService<Developer>, DeveloperService>();
 
 
 var app = builder.Build();

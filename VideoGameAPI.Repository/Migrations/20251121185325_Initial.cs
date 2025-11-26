@@ -16,6 +16,7 @@ namespace VideoGameApi.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    // TODO: NVARCHARMAX voor een titel? 
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Platform = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Developer = table.Column<string>(type: "nvarchar(max)", nullable: true),

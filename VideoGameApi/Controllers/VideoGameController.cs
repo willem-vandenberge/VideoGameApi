@@ -12,8 +12,8 @@ namespace VideoGameApi.Controllers
     [ApiController]
     public class VideoGameController : ControllerBase
     {
+
         private readonly IService<VideoGame> _videoGameService;
-        //private readonly VideoGameDBContext _context;
 
         // "oude manier" => vanaf c#12 kan je gebruik maken van primary constructor ook
         // géén primary constructor is overzichtelijker... 
@@ -22,44 +22,18 @@ namespace VideoGameApi.Controllers
             _videoGameService = videoGameService;
         }
 
-        // Geen persistentie
-        // hardcoded lijst, aanpassingen worden niet opgeslagen bij bv heropstarten app
-        //static private List<VideoGame> videoGames = new List<VideoGame>
-        //{
-        //    new VideoGame
-        //    {
-        //        Id = 1,
-        //        Title = "Spider-Man 1",
-        //        Platform = "PS5",
-        //        Developer = "Insomniac Games",
-        //        Publisher = "Sony Interactive Entertainment"
-        //    },
-        //    new VideoGame
-        //    {
-        //        Id = 2,
-        //        Title = "Spider-Man 2",
-        //        Platform = "PS5",
-        //        Developer = "Insomniac Games",
-        //        Publisher = "Sony Interactive Entertainment"
-        //    },
-        //    new VideoGame
-        //    {
-        //        Id = 3,
-        //        Title = "Spider-Man 3",
-        //        Platform = "PS5",
-        //        Developer = "Insomniac Games",
-        //        Publisher = "Sony Interactive Entertainment"
-        //    },
-        //    new VideoGame
-        //    {
-        //        Id = 4,
-        //        Title = "Spider-Man 4",
-        //        Platform = "PS5",
-        //        Developer = "Insomniac Games",
-        //        Publisher = "Sony Interactive Entertainment"
-        //    },
-        //};
-
+        [HttpGet]
+        public async Task<ActionResult<List<VideoGame>>> GetVideoGames()
+        {
+            try
+            {
+                var videoGames = await _videoGameService.GetAll();
+                return Ok(videoGames);
+            } catch ( Exception e)
+            {
+                return NotFound();
+            }
+        }
 
         // Route specifiëren obv id die we willen ophalen kan met [Route("{id}")]
         // of combineren in HttpGet zoals hieronder
