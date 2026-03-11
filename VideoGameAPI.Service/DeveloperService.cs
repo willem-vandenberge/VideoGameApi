@@ -9,11 +9,11 @@ using VideoGameAPI.Service.Contracts;
 
 namespace VideoGameAPI.Service
 {
-    public class DeveloperService : IService<Developer>
+    public class DeveloperService : IDeveloperService
     {
-        private readonly IDAO<Developer> _developerDAO;
+        private readonly IDeveloperDAO _developerDAO;
 
-        public DeveloperService(IDAO<Developer> developerDAO)
+        public DeveloperService(IDeveloperDAO developerDAO)
         {
             _developerDAO = developerDAO;
         }
@@ -27,6 +27,17 @@ namespace VideoGameAPI.Service
         public async Task<IEnumerable<Developer>> GetAll()
         {
             return await _developerDAO.GetAllAsync();
+        }
+
+        public async Task<Developer> AddAsync(Developer developer)
+        {
+            // validatie en error afhandeling
+            return await _developerDAO.AddAsync(developer);
+        }
+
+        public async Task<bool> RemoveAsync(int id)
+        {
+            return await _developerDAO.RemoveAsync(id);
         }
     }
 }

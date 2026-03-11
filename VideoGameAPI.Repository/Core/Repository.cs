@@ -13,6 +13,11 @@ namespace VideoGameAPI.Repository.Core
             _context = context;
         }
 
+        public Task<TEntity> AddAsync(TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<TEntity>> GetAllAsync()
         {
             throw new NotImplementedException();
@@ -23,6 +28,14 @@ namespace VideoGameAPI.Repository.Core
             throw new NotImplementedException();
         }
 
-       
+        public Task<bool> RemoveAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<TEntity> UpdateAsync(int id, TEntity entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

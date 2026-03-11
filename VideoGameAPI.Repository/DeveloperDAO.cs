@@ -10,7 +10,7 @@ using VideoGameAPI.Repository.Core;
 
 namespace VideoGameAPI.Repository
 {
-    public class DeveloperDAO : IDAO<Developer>
+    public class DeveloperDAO : IDeveloperDAO
     {
         private readonly VideoGameDBContext _context;
 
@@ -18,6 +18,7 @@ namespace VideoGameAPI.Repository
         {
             _context = context;
         }
+
 
         public async Task<IEnumerable<Developer>> GetAllAsync()
         {
@@ -45,6 +46,67 @@ namespace VideoGameAPI.Repository
             } catch(Exception e)
             {
                 throw new Exception($"An Error in DeveloperDAO in GetAsync method with message: {e.Message}.");
+
+            }
+        }
+
+        public async Task<Developer> AddAsync(Developer entity)
+        {
+            try
+            {
+                if( entity is null)
+                {
+                    throw new ArgumentNullException("The entity does not contain a value");
+                }
+
+                // TODO : validation for entity
+
+                // Entiteit toevoegen aan de context
+                _context.Developers.Add(entity);
+
+                // De wijzigingen opslaan in de database
+                await _context.SaveChangesAsync();
+
+                // Nadat SaveChangesAsync is uitgevoerd, heeft 'entity' automatisch het nieuwe ID gekregen van de dbs
+                // entity met nieuwe id retourneren 
+                return entity;
+
+            } catch (Exception ex)
+            {
+                throw new Exception($"An Error in DeveloperDAO AddAsync method with message: {ex.Message}");
+            }
+        }
+
+        public async Task<bool> RemoveAsync(int id)
+        {
+            try
+            {
+                var devToDelete = await _context.Developers.FindAsync(id);
+                if (devToDelete is null)
+                {
+                    return false;
+                }
+
+                await _context.SaveChangesAsync();
+
+                return true;
+
+            } catch (Exception ex)
+            {
+                throw new Exception("Error from delete method in DeveloperDAO", ex);
+            }
+            
+        }
+
+        public async Task<Developer> UpdateAsync(int id, Developer developerChanges)
+        {
+            try
+            {
+                throw new NotImplementedException();
+
+            } catch (Exception ex)
+            {
+                throw new Exception($"An Error in DeveloperDAO UpdateAsync method with message: {ex.Message}", ex);
 
             }
         }

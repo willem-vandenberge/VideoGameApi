@@ -22,12 +22,15 @@ builder.Services.AddDbContext<VideoGameDBContext>(options =>
 
 // Data access objects registreren voor DI
 // AddTransient: registreren van een service met een tijdelijke levensduur
-builder.Services.AddTransient<IDAO<VideoGame>, VideoGameDAO>();
-builder.Services.AddTransient<IDAO<Developer>, DeveloperDAO>();
+// => elke request nieuwe instantie
+// ~ AddScoped: een instantie voor elk HTTP request
+// ~ AddSingleton: één instantie voor de levensduur van de app
+builder.Services.AddTransient<IVideoGameDAO, VideoGameDAO>();
+builder.Services.AddTransient<IDeveloperDAO, DeveloperDAO>();
 
 // Service klassen registreren voor DI
-builder.Services.AddTransient<IService<VideoGame>, VideoGameService>();
-builder.Services.AddTransient<IService<Developer>, DeveloperService>();
+builder.Services.AddTransient<IVideoGameService, VideoGameService>();
+builder.Services.AddTransient<IDeveloperService, DeveloperService>();
 
 
 var app = builder.Build();
@@ -36,6 +39,7 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     // Scalar depency toevoegen om documentatie overzichtelijker te maken OpenAPI/Swaggar
+    // toegang via jouw website (~localhost:) %/scalar/v1
     app.MapScalarApiReference();
     app.MapOpenApi();
 }

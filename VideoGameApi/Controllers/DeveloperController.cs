@@ -12,9 +12,9 @@ namespace VideoGameApi.Controllers
     public class DeveloperController : ControllerBase
     {
 
-        private readonly IService<Developer> _developerService;
+        private readonly IDeveloperService _developerService;
 
-        public DeveloperController(IService<Developer> developerService)
+        public DeveloperController(IDeveloperService developerService)
         {
             _developerService = developerService;
         }
@@ -50,6 +50,43 @@ namespace VideoGameApi.Controllers
             } catch(Exception e) {
                 // should get return notfound when list is empty/error handling
                 return NotFound();
+            }
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Developer>> AddDeveloper(Developer developer)
+        {
+            try
+            {
+                if(developer is null)
+                {
+                    return BadRequest("Developer data is missing."); 
+                }
+                // als data niet correct is => UnprocessableEntity
+
+                var dev = await _developerService.AddAsync(developer);
+                return dev; 
+
+            } catch (Exception ex)
+            {
+
+
+                // ongekende error doet zich voor => internal server error
+                return StatusCode(500, "An internal server error has occured");
+            }
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult> DeleteDeveloper(int id)
+        {
+            try
+            {
+                bool deleted = await _developerService.RemoveAsync(id);
+                return deleted ? NoContent() : NotFound("Developer with given Id not found");
+
+            } catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occured");
             }
         }
 

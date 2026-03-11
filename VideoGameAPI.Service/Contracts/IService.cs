@@ -13,5 +13,8 @@ namespace VideoGameAPI.Service.Contracts
     {
         Task<TEntity> Get(int id);
         Task<IEnumerable<TEntity>> GetAll();
+        Task<TEntity> AddAsync(TEntity entity);
+        Task<bool> RemoveAsync(int id);
+
     }
 }

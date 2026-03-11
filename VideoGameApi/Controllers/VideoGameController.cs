@@ -13,11 +13,15 @@ namespace VideoGameApi.Controllers
     public class VideoGameController : ControllerBase
     {
 
-        private readonly IService<VideoGame> _videoGameService;
+        private readonly IVideoGameService _videoGameService;
 
         // "oude manier" => vanaf c#12 kan je gebruik maken van primary constructor ook
+        // een bijkomend voordeel? is dat ook het veld _videoGameService kan weggelaten worden.
+        // => de scope van een 'veld' uit een primary constructor is de volledige klasse. 
+        // => bij een klasse is dit veld mutable (bij een record niet)
         // géén primary constructor is overzichtelijker... 
-        public VideoGameController(IService<VideoGame> videoGameService)
+        // public class VideoGameController(IVideoGameService videoGameService) : ControllerBase
+        public VideoGameController(IVideoGameService videoGameService)
         {
             _videoGameService = videoGameService;
         }
@@ -45,6 +49,33 @@ namespace VideoGameApi.Controllers
                 return NotFound(); // 404 id niet gevonden
             return Ok(game);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<VideoGame>> AddVideoGame(VideoGame videoGame)
+        {
+            try
+            {
+                if (videoGame is null)
+                {
+                    return BadRequest("VideoGame data not found");
+                }
+
+                var savedVideoGame = await _videoGameService.AddAsync(videoGame);
+                // met createdAtAction retourneren we 201 ok en voegen we de location header toe
+                // die de client exact laat weten waar het nieuwe item kan gevonden worden
+                // => nameof is veiliger en minder foutgevoelig dan een gewone string
+                return CreatedAtAction(
+                    actionName: nameof(GetVideoGameById),       
+                    routeValues: new { id = savedVideoGame.Id},
+                    value: savedVideoGame
+                 );
+
+            } catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server error has occured.");
+            }
+        }
+
 
         /**
          * Videogame aanmaken. 

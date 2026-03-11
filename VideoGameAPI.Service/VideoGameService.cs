@@ -10,13 +10,13 @@ using VideoGameAPI.Service.Contracts;
 
 namespace VideoGameAPI.Service
 {
-    public class VideoGameService : IService<VideoGame>
+    public class VideoGameService : IVideoGameService
     {
         
-        private readonly IDAO<VideoGame> _videoGameDAO;
+        private readonly IVideoGameDAO _videoGameDAO;
 
         // => Dep injection : registered videoGameDAO gets injected into constructors params 
-        public VideoGameService(IDAO<VideoGame> videoGameDAO)
+        public VideoGameService(IVideoGameDAO videoGameDAO)
         {
             _videoGameDAO = videoGameDAO;
         }
@@ -31,6 +31,16 @@ namespace VideoGameAPI.Service
         public async Task<IEnumerable<VideoGame>> GetAll()
         {
             return await _videoGameDAO.GetAllAsync();
+        }
+
+        public async Task<VideoGame> AddAsync(VideoGame videoGame)
+        {
+            return await _videoGameDAO.AddAsync(videoGame);
+        }
+
+        public async Task<bool> RemoveAsync(int id)
+        {
+            return await _videoGameDAO.RemoveAsync(id);
         }
     }
 }

@@ -13,10 +13,13 @@ namespace VideoGameAPI.Repository.Contracts
 
         //IEnumerable<TEntity> Find(Expression<Func<TEntity, bool>> predicate);
 
-        //void Add(TEntity entity);
+        Task<TEntity> AddAsync(TEntity entity);
+
         //void AddRange(IEnumerable<TEntity> entities);
 
-        //void Remove(TEntity entity);
+        Task<TEntity> UpdateAsync(int id, TEntity entity);
+
+        Task<bool> RemoveAsync(int id);
         //void RemoveRange(IEnumerable<TEntity> entities);
 
     }
