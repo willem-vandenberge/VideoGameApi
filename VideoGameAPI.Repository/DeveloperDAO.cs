@@ -87,6 +87,7 @@ namespace VideoGameAPI.Repository
                     return false;
                 }
 
+                _context.Developers.Remove(devToDelete);
                 await _context.SaveChangesAsync();
 
                 return true;

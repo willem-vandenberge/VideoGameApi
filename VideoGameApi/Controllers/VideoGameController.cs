@@ -61,6 +61,7 @@ namespace VideoGameApi.Controllers
                 }
 
                 var savedVideoGame = await _videoGameService.AddAsync(videoGame);
+
                 // met createdAtAction retourneren we 201 ok en voegen we de location header toe
                 // die de client exact laat weten waar het nieuwe item kan gevonden worden
                 // => nameof is veiliger en minder foutgevoelig dan een gewone string
@@ -76,60 +77,20 @@ namespace VideoGameApi.Controllers
             }
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> DeleteVideoGame(int id)
+        {
+            try
+            {
+                var deleted = await _videoGameService.RemoveAsync(id);
+                return deleted ? NoContent() : NotFound("Videogame with given Id not found.");
 
-        /**
-         * Videogame aanmaken. 
-         * Nieuwe videogame wordt geretourneerd ook
-         */
-        //[HttpPost]
-        //public ActionResult<VideoGame> AddVideoGame(VideoGame newGame)
-        //{
-        //    if (newGame is null)
-        //        return BadRequest();
+            } catch (Exception ex)
+            {
+                return StatusCode(500, "An internal server has occured");
+            }
+        }
 
-        //    // Max functie gebruiken om de hoogste Id op te halen
-        //    newGame.Id = videoGames.Max(g => g.Id) + 1;
-        //    videoGames.Add(newGame);
-
-        //    return CreatedAtAction(nameof(GetVideoGameById), new { id = newGame.Id }, newGame);
-        //}
-
-        /**
-         * Update method
-         * "put" - endpoint that can update the complete object
-         * "patch" - endpoint die misschien maar 1 property updates
-         * 
-         * put vereist de bestaande id van een object
-         */
-        //[HttpPut("{id}")]
-        //public IActionResult UpdateVideoGame(int id, VideoGame updateGame)
-        //{
-        //    var game = videoGames.FirstOrDefault(g => g.Id == id);
-        //    if (game is null)
-        //        return NotFound(); // id komt niet overeen met bestaand object
-
-        //    game.Title = updateGame.Title;
-        //    game.Platform = updateGame.Platform;
-        //    game.Developer = updateGame.Developer;
-        //    game.Publisher = updateGame.Publisher;
-
-        //    return NoContent(); // Succesvol
-        //}
-
-        /**
-         * Delete method
-         */
-        //[HttpDelete("{id}")]
-        //public IActionResult DeleteVideoGame(int id)
-        //{
-        //    var game = videoGames.FirstOrDefault(g => g.Id == id);
-        //    if (game is null)
-        //        return NotFound(); // 404 videogame bestaat niet
-
-        //    videoGames.Remove(game);
-
-        //    return NoContent();
-        //}
 
 
     }
